@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html ng-app="gemStore">
+
+<head>
+  <title>Gem Store</title>
+  <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+</head>
+
+<body ng-controller="StoreCtrl as store">
+  <div class="container">
+    <div class="header">
+      <h1>Flatlander Crafted Gems</h1>
+      <h2>- an Angular store -</h2>
+    </div>
+    <!-- as keyword used for creating "alias" store in expressions -->
+    <ul class="list-group">
+      <!-- orderBy: with - sign, ordered from high to low; no - sign, low to high -->
+      <li class="list-group-item" ng-repeat="product in store.products | orderBy:'-price'" ng-hide="store.products.soldOut">
+        <h1>
+        {{product.name}}
+        <em class="pull-right">{{product.price | currency}}</em> <!-- formats price with correct $ sign and decimal places (i.e $2.00) -->
+        <!-- <img ng-src="{{product.images[0].full}}"/> --> <!-- without ng- before src, img will attempt to load beford expression is interpreted -->
+        </h1>
+        <section ng-controller="PanelCtrl as panel"> <!--defaults first tab to show on start/refresh of page -->
+          <ul class="nav nav-pills">
+            <li ng-class="{ active:panel.isSelected(1)}">
+              <a href ng-click="panel.selectTab(1)">Description</a>
+            </li>
+            <li ng-class="{ active:panel.isSelected(2)}">
+              <a href ng-click="panel.selectTab(2)">Specifications</a>
+            </li>
+            <li ng-class="{ active:panel.isSelected(3)}">
+              <a href ng-click="panel.selectTab(3)">Reviews</a>
+            </li>
+          </ul>
+          <div class="panel" ng-show="panel.isSelected(1)">
+            <h4>Description</h4>
+            <blockquote>{{product.description}}</blockquote>
+          </div>
+          <div class="panel" ng-show="panel.isSelected(2)">
+            <h4>Specifications</h4>
+            <blockquote>No specs to provide at this time. <br> Please check back later!</blockquote>
+          </div>
+          <div class="panel" ng-show="panel.isSelected(3)">
+            <h4>Reviews</h4>
+            <blockquote>No reviews. <br> Be the first to review this lovely gem!</blockquote>
+          </div>
+        </section>
+        <button ng-show="product.canPurchase">Add to Cart</button>
+        <em ng-hide="product.canPurchase">Sorry, this gem is not available for purchase.</em>
+      </li>
+    </ul>
+  </div>
+
+
+  <script type="text/javascript" src="angular.min.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+</body>
+
+</html>
